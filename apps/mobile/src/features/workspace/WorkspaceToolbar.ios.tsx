@@ -121,17 +121,6 @@ export function WorkspaceToolbar(props: {
       separateBackground
     />
   ) : null;
-  // The folded Duo opens search from its tab bar's search tab; this button only closes it.
-  const searchButton =
-    foldedSearch && searchVisible ? (
-      <Toolbar.Button
-        identifier="workspace-search"
-        accessibilityLabel="Close search"
-        icon="xmark"
-        onPress={() => searchRef.current?.cancelSearch()}
-        separateBackground
-      />
-    ) : null;
   return (
     <>
       <NativeStackScreenOptions
@@ -158,7 +147,6 @@ export function WorkspaceToolbar(props: {
                     sidebarTabs !== "picker",
                   placeholder:
                     selectedTab === "pullRequests" ? "Search pull requests" : "Search threads",
-                  cancelButtonHidden: foldedSearch,
                   onFocus: searchFocused,
                   onBlur: () => workspace.dispatch({ type: "expand", tab: selectedTab }),
                   onSearchButtonPress: () => searchRef.current?.blur(),
@@ -175,8 +163,6 @@ export function WorkspaceToolbar(props: {
       />
       {/* UIKit lays trailing items out from the edge inward. */}
       <Toolbar placement="right">
-        {searchButton}
-        {nativeToolbarCompose && searchButton ? <Toolbar.Spacer width={8} /> : null}
         {composeButton}
         {selectedTab !== "threads" ||
         isDuoDevice(deviceType) ||
